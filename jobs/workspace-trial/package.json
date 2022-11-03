@@ -1,6 +1,9 @@
 {
     "name": "workspace-trial",
     "private": true,
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "build": "tsc"
     },
