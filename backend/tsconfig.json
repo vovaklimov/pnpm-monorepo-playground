@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "baseUrl": "src",
+        "sourceRoot": "src",
+        "outDir": "dist",
+        "module": "CommonJS",
+        "sourceMap": true,
+        "allowJs": true,
+        "declaration": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "lib": ["ESNext"]
+    },
+    "include": ["src/**/*.ts"]
+}

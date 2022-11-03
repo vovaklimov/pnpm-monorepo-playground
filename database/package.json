@@ -1,0 +1,15 @@
+{
+    "name": "database",
+    "private": true,
+    "main": "./generated/client/index.js",
+    "types": "./generated/client/index.d.ts",
+    "scripts": {
+        "gen": "prisma generate"
+    },
+    "devDependencies": {
+        "prisma": "^4.5.0"
+    },
+    "dependencies": {
+        "@prisma/client": "^4.5.0"
+    }
+}

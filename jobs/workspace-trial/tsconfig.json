@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./src",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "target": "ES2021",
+        "module": "CommonJS",
+        "sourceMap": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "lib": ["ESNext"]
+    },
+    "exclude": ["node_modules"],
+    "include": ["src/**/*.ts"]
+}
