@@ -1,23 +1,39 @@
-FROM node:16.18-alpine as build
-RUN corepack enable
-WORKDIR /app
+FROM node:16.18-alpine AS builder
+RUN apk add --no-cache libc6-compat
+RUN apk update
 
-COPY ./package.json .
-COPY ./pnpm-lock.yaml .
-COPY ./pnpm-workspace.yaml .
+RUN corepack enable
+
+WORKDIR /app
 COPY . .
 
-RUN pnpm -F database i
-RUN pnpm -F workspace-trial i
+RUN pnpx turbo prune --scope=workspace-trial --docker
 
-RUN pnpm -F database gen
-RUN pnpm -F workspace-trial build
+FROM node:16.18-alpine AS installer
+
+RUN apk add --no-cache libc6-compat
+RUN apk update
+
+RUN corepack enable
+
+WORKDIR /app
+# First install the dependencies (as they change less often)
+COPY .gitignore .gitignore
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+
+RUN pnpm install
+
+# Build the project
+COPY --from=builder /app/out/full/ .
+COPY turbo.json turbo.json
+RUN pnpm turbo run build --filter=workspace-trial
 RUN pnpm -F workspace-trial --prod deploy ./pruned
 
 FROM node:16.18-alpine
 
 ENV NODE_ENV=production
 
-COPY --from=build /app/pruned /workspace-trial
+COPY --from=installer /app/pruned .
 
-CMD [ "node", "/workspace-trial/dist/index.js" ]
+CMD [ "node", "./dist/index.js" ]
